@@ -10,29 +10,29 @@ output: html_notebook
 #Carol: non-color coded
 d <- read.table('gene_exp.diff',header=T,as.is=T) # reads the gene_exp file
 d <- d[order(d$q_value),]   # arranging by q value ]
-##d<- d[order(d$q_value),]
-head(d, n=10) # number of DE for all genes
+##d<- d[order(d$p_value),] # arranges by p value and also gives similar results to q_value
+head(d, n=10) # dimensions of DE for all genes
 #hist(d$log2.fold_change.,breaks=100)
 hist(d$log2.fold_change.,breaks=100, main = "Log2 Fold Change for All Genes",xlab = "Log2 fold change for All Genes",col = "cyan")
+dim(d)  #gives the # of genes in 'gene_exp.diff'
 
 
-
-dev.copy(png,'all_cufflinks_fc.png')
+dev.copy(png,'all_cufflinks_fc.png') 
 dev.off()
 
 d.sig <- subset(d,significant=="yes")  
 #hist(d.sig$log2.fold_change.,breaks=100)
 #hist(d.sig$log2.fold_change.,breaks=100, main = " Log2 fold change for 'Significant DE genes",xlab = "Log2 fold change",col = "cyan") 
 hist(d.sig$log2.fold_change.,breaks=100, main = " Log2 fold change for 'Significant DE genes",xlab = "Log2 fold change",col = "cyan") 
-head(d.sig, n=10) # number of SDE  genes
+head(d.sig, n=10) # dimensions  of SDE  genes
 dev.copy(png,'sig_cufflinks_fc.png')
 dev.off()
-
+dim(d.sig) #gives the # of SDE genes
 
 d.sig.up <- subset(d.sig,log2.fold_change.>0)
 d.sig.dn <- subset(d.sig,log2.fold_change.<0)
-dim(d.sig.up)
-dim(d.sig.dn)
+dim(d.sig.up) #gives the # upregulated genes
+dim(d.sig.dn) #gives the # of downregulated genes
 
 # writes to txt and csv files
 write(d.sig.up$gene,"up_genes.txt") 
