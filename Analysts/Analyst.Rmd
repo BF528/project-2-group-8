@@ -1,0 +1,80 @@
+---
+title: "Analyst: Carol Muriithi"
+output: html_notebook
+---
+
+
+####Color coded Analysis Code
+
+```{r}
+#Carol: non-color coded
+d <- read.table('gene_exp.diff',header=T,as.is=T) # reads the gene_exp file
+d <- d[order(d$q_value),]   # arranging by q value ]
+##d<- d[order(d$q_value),]
+head(d, n=10) # number of DE for all genes
+#hist(d$log2.fold_change.,breaks=100)
+hist(d$log2.fold_change.,breaks=100, main = "Log2 Fold Change for All Genes",xlab = "Log2 fold change for All Genes",col = "cyan")
+
+
+
+dev.copy(png,'all_cufflinks_fc.png')
+dev.off()
+
+d.sig <- subset(d,significant=="yes")  
+#hist(d.sig$log2.fold_change.,breaks=100)
+#hist(d.sig$log2.fold_change.,breaks=100, main = " Log2 fold change for 'Significant DE genes",xlab = "Log2 fold change",col = "cyan") 
+hist(d.sig$log2.fold_change.,breaks=100, main = " Log2 fold change for 'Significant DE genes",xlab = "Log2 fold change",col = "cyan") 
+head(d.sig, n=10) # number of SDE  genes
+dev.copy(png,'sig_cufflinks_fc.png')
+dev.off()
+
+
+d.sig.up <- subset(d.sig,log2.fold_change.>0)
+d.sig.dn <- subset(d.sig,log2.fold_change.<0)
+dim(d.sig.up)
+dim(d.sig.dn)
+
+# writes to txt and csv files
+write(d.sig.up$gene,"up_genes.txt") 
+write(d.sig.dn$gene,"dn_genes.txt")
+write(d.sig.up$gene,"up_genes.csv")
+write(d.sig.dn$gene,"dn_genes.csv")
+
+```
+
+
+## Carol's non-color coded code
+```{r}
+d <- read.table('gene_exp.diff',header=T,as.is=T)
+hist(d$log2.fold_change.,breaks=100)
+dev.copy(png,'all_cufflinks_fc.png')
+dev.off()
+
+d.sig <- subset(d,significant=="yes")
+hist(d.sig$log2.fold_change.,breaks=100)
+dev.copy(png,'sig_cufflinks_fc.png')
+dev.off()
+
+d.sig <- d.sig[order(d.sig$q_value),]
+d.sig.up <- subset(d.sig,log2.fold_change.>0)
+d.sig.dn <- subset(d.sig,log2.fold_change.<0)
+
+
+write(d.sig.up$gene,"up_genes.txt") 
+write(d.sig.dn$gene,"dn_genes.txt")
+write(d.sig.up$gene,"up_genes.csv")
+write(d.sig.dn$gene,"dn_genes.csv")
+
+```
+
+
+
+
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
